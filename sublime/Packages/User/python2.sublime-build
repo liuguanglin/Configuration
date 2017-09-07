@@ -1,0 +1,14 @@
+{
+    "cmd": ["py", "-2", "-u", "$file"],
+    "file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+    "selector": "source.python",
+    "encoding": "cp936",
+
+    "variants":
+    [
+        {
+            "name": "Python2",
+            "cmd": ["C:/Python27/python.exe", "-u", "$file"]
+        }   
+    ]
+}
