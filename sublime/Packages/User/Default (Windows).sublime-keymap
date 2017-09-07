@@ -7,5 +7,15 @@
         "id": "repl_python_run",
         "file": "config/Python/Main.sublime-menu"
     }
+},
+
+{
+    "keys": ["f12"],
+    "caption": "SublimeREPL: Python2 - RUN current file",
+    "command": "run_existing_window_command",
+    "args": {
+        "id": "repl_python2_run",
+        "file": "config/Python2/Main.sublime-menu"
+    }
 }
 ]
