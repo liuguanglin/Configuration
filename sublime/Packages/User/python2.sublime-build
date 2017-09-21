@@ -2,8 +2,7 @@
     "cmd": ["py", "-2", "-u", "$file"],
     "file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
     "selector": "source.python",
-    "encoding": "cp936",
-
+	"env": {"PYTHONIOENCODING": "utf8"},
     "variants":
     [
         {
