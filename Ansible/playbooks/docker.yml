@@ -1,0 +1,25 @@
+- name: install docker
+  hosts: ContSrvs
+  vars:
+    gpgfile: /usr/share/keyrings/docker-archive-keyring.gpg
+  tasks:
+    - name: remove old versions
+      apt: 
+        name: ['docker', 'docker-engine', 'docker.io', 'containerd', 'runc'] 
+        state: absent 
+        purge: yes
+        autoclean: yes 
+        autoremove: yes 
+    - name: set up tools
+      apt:
+        name: ['ca-certificates', 'curl', 'gnupg', 'lsb-release']
+        update_cache: yes
+    - name: download gpg
+      shell: curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o {{ gpgfile }}  creates={{ gpgfile }}
+    - name: add repo
+      shell: echo "deb [arch=$(dpkg --print-architecture) signed-by={{ gpgfile }}] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list 
+    - name: install docker
+      apt:
+        name: ['docker-ce', 'docker-ce-cli', 'containerd.io']
+        update_cache: yes
+        state: present
