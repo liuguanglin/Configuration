@@ -1,24 +1,26 @@
-- name: install docker
+- name: Install docker
   hosts: ContSrvs
   vars:
     gpgfile: /usr/share/keyrings/docker-archive-keyring.gpg
+    official_url: https://download.docker.com/linux/debian
+    mirror_url: https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/debian
   tasks:
-    - name: remove old versions
+    - name: Remove old versions
       apt: 
         name: ['docker', 'docker-engine', 'docker.io', 'containerd', 'runc'] 
         state: absent 
         purge: yes
         autoclean: yes 
         autoremove: yes 
-    - name: set up tools
+    - name: Set up tools
       apt:
         name: ['ca-certificates', 'curl', 'gnupg', 'lsb-release']
         update_cache: yes
-    - name: download gpg
-      shell: curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o {{ gpgfile }}  creates={{ gpgfile }}
-    - name: add repo
-      shell: echo "deb [arch=$(dpkg --print-architecture) signed-by={{ gpgfile }}] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list 
-    - name: install docker
+    - name: Download gpg
+      shell: curl -fsSL {{ mirror_url }}/gpg | gpg --dearmor -o {{ gpgfile }}  creates={{ gpgfile }}
+    - name: Add repo
+      shell: echo "deb [arch=$(dpkg --print-architecture) signed-by={{ gpgfile }}] {{ mirror_url }} $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list 
+    - name: Install docker
       apt:
         name: ['docker-ce', 'docker-ce-cli', 'containerd.io']
         update_cache: yes
