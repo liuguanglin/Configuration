@@ -1,0 +1,25 @@
+---
+- name: Remove old versions
+  apt: 
+    name: ['docker', 'docker-engine', 'docker.io', 'containerd', 'runc'] 
+    state: absent 
+    purge: yes
+    autoclean: yes 
+    autoremove: yes 
+
+- name: Install tools
+  apt:
+    name: ['ca-certificates', 'curl', 'gnupg', 'lsb-release']
+    update_cache: yes	
+
+- name: Setup gpg
+  shell: curl -fsSL {{ debian_mirror_url }}/gpg | gpg --dearmor -o {{ gpgpath }}  creates={{ gpgpath }}
+
+- name: Add repo
+  shell: echo "deb [arch=$(dpkg --print-architecture) signed-by={{ gpgpath }}] {{ debian_mirror_url }} $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list
+
+- name: Install docker
+  apt:
+    name: ['docker-ce', 'docker-ce-cli', 'containerd.io']
+    update_cache: yes
+    state: present
