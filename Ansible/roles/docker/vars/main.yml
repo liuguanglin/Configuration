@@ -2,3 +2,4 @@
 gpgpath: /usr/share/keyrings/docker-archive-keyring.gpg
 debian_official_url: https://download.docker.com/linux/debian
 debian_mirror_url: https://mirrors.aliyun.com/docker-ce/linux/debian
+cgroupdriver: systemd
