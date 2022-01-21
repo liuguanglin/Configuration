@@ -7,3 +7,6 @@
     src: daemon.json.j2
     dest: /etc/docker/daemon.json
   notify: restart docker
+
+- name: Restart docker to change cgroupdriver for k8s right now
+  meta: flush_handlers

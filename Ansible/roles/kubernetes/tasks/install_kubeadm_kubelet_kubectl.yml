@@ -1,0 +1,33 @@
+---
+- name: Install dependencies
+  apt:
+    name: ['apt-transport-https', 'ca-certificates', 'curl']
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Download public key
+  get_url:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    dest: /usr/share/keyrings/kubernetes-archive-keyring.gpg
+  when: ansible_os_family == 'Debian'
+
+- name: Add Kubernetes repository
+  shell: echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
+  when: ansible_os_family == 'Debian'
+
+- name: Install kubelet, kubeadm and kubectl
+  apt:
+    name: ['kubelet', 'kubeadm', 'kubectl']
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Apt-mark hold
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  with_items:
+    - kubelet
+    - kubeadm
+    - kubectl
+  when: ansible_os_family == 'Debian'
+

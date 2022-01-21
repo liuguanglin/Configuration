@@ -1,0 +1,14 @@
+- include: prerequisites.yml
+
+- name: Install docker
+  include_role:
+    name: docker
+
+- include: install_kubeadm_kubelet_kubectl.yml
+
+- include_tasks: cluster_init.yml
+  when: node_role == 'master'
+
+- include_tasks: join_cluster.yml
+  when: node_role == 'worker'
+

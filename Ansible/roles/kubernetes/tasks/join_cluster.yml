@@ -1,0 +1,4 @@
+---
+- name: Nodes join cluster
+  shell: "{{ join_cmd }} creates=/etc/kubernetes/kubelet.conf"
+  when: node_role == 'worker'
