@@ -1,0 +1,6 @@
+FROM alpine
+RUN apk update && apk add nginx
+RUN mkdir /run/nginx && touch /run/nginx/nginx.pid && echo "hello, `hostname`." > /var/www/index.html
+COPY mysite.conf /etc/nginx/conf.d/
+EXPOSE 8080
+CMD nginx -g "daemon off;"
