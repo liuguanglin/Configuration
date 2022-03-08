@@ -1,4 +1,5 @@
-FROM alpine
+# 需指定alpine版本，因为新版alpine中的nginx目录结构有所改变
+FROM alpine:3.13
 RUN apk update && apk add nginx
 RUN mkdir /run/nginx && touch /run/nginx/nginx.pid && echo "hello, `hostname`." > /var/www/index.html
 COPY mysite.conf /etc/nginx/conf.d/
