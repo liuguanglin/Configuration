@@ -31,3 +31,21 @@
     - kubectl
   when: ansible_os_family == 'Debian'
 
+- name: Gather packages info
+  package_facts:
+    manager: auto
+
+- name: Gather k8s version
+  set_fact:
+    k8s_ver: "{{ ansible_facts.packages['kubeadm'][0].version }}"
+
+- name: Enable CRI plugin when version >= 1.24
+  replace:
+    path: /etc/containerd/config.toml
+    regexp: '^(disabled_plugins)'
+    replace: '#\1'
+  notify: restart containerd
+  when: k8s_ver is version('1.24', '>=')
+  
+- name: flush_handlers
+  meta: flush_handlers
